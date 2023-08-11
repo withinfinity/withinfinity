@@ -1,0 +1,18 @@
+[package]
+name = "crypto_pet"
+version = "0.0.1"
+#published-at = "0xeaf82cdd3decff9cd88781daed238adcbaeffb2ff7a80f6a8600fefa8586d10e"
+
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "devnet-v1.5.0" }
+Eps = { git = "https://github.com/0xobelisk/obelisk-engine.git", subdir = "package/move-eps",rev = "main" }
+
+
+
+[addresses]
+sui =  "0x2"
+eps =  "0x0a67124c7c9c35a8e2161360c60dcea1b505ee693bf7893c432596be7d6597e1"
+crypto_pet = "0x0"
+
+
