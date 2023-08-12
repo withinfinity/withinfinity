@@ -1,9 +1,9 @@
-module earth::work_system {
+module earth::river_system {
     use eps::world::{World, get_mut_entity};
     use eps::entity::{get_components};
     use earth::age_component::{Age, get_update_time, refresh_update_time};
     use sui::clock::Clock;
-    use earth::states_component::{Stats, change_stats, get_stats};
+    use earth::stats_component::{Stats, change_stats, get_stats};
     use earth::time_system::get_time;
     use sui::bag;
     use sui::event;

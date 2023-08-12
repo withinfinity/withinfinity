@@ -7,6 +7,8 @@ module earth::world {
     use earth::age_component::gen_age;
     use crypto_pet::status_component::gen_status;
 
+
+
     #[allow(unused_function)]
     fun init(ctx: &mut TxContext) {
         let world = create_world(ctx);
@@ -18,6 +20,7 @@ module earth::world {
         let entity = create_entity(ctx);
         add_entity_in_world(world,entity);
     }
+
 
     public entry fun set_status_component_to_entity(
         world: &mut World,
