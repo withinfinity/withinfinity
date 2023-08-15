@@ -4,13 +4,23 @@
 version = 0
 
 dependencies = [
+  { name = "Components" },
+  { name = "Eps" },
+  { name = "Sui" },
+]
+
+[[move.package]]
+name = "Components"
+source = { local = "../obelisk-engine/components" }
+
+dependencies = [
   { name = "Eps" },
   { name = "Sui" },
 ]
 
 [[move.package]]
 name = "Eps"
-source = { git = "https://github.com/0xobelisk/obelisk-engine.git", rev = "main", subdir = "package/move-eps" }
+source = { local = "../obelisk-engine/eps" }
 
 dependencies = [
   { name = "Sui" },
