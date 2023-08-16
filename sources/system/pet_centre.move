@@ -21,11 +21,12 @@ module crypto_pet::pet_centre {
         let sex_component = new_sex(sex);
         let birth_component = new_birth_time(clock);
 
+        add_entity_in_world(world, entity_key, entity);
+
         add_component(world,entity_key,name_component);
         add_component(world,entity_key,sex_component);
         add_component(world,entity_key,birth_component);
 
-        add_entity_in_world(world, entity_key, entity);
         transfer::public_transfer(pet, tx_context::sender(ctx));
     }
 
