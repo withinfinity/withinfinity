@@ -1,7 +1,6 @@
 module crypto_pet::pet_centre {
     use eps::world::{World, add_entity_in_world, add_component};
     use eps::entity::{ create_entity};
-    use crypto_pet::pet_world::{new_pet, Pet};
     use sui::object;
     use sui::transfer;
     use sui::tx_context;
@@ -10,6 +9,7 @@ module crypto_pet::pet_centre {
     use components::sex::new_sex;
     use components::birth_time::new_birth_time;
     use sui::clock::Clock;
+    use crypto_pet::pet_component::{new_pet, Pet};
 
     /// add new pet to world
     public entry fun adopt_pet(world: &mut World, name: vector<u8>, sex: bool,clock: &Clock, ctx: &mut TxContext) {
