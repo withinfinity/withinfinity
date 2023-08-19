@@ -16,6 +16,7 @@ module crypto_pet::pet_system {
     use std::string;
     use components::birth_time_component::BirthTimeComponent;
     use components::sex_component::SexComponent;
+    use sui::object::ID;
 
     /// add new pet to world
     public entry fun adopt_pet(world: &mut World, name: vector<u8>, sex: bool,clock: &Clock, ctx: &mut TxContext) {
@@ -27,10 +28,10 @@ module crypto_pet::pet_system {
         let birth_component = birth_time_component::new_birth_time(clock);
         let status_component =  status_component::new_status(ctx);
 
-        add_component(&mut entity,name_component);
-        add_component(&mut entity,sex_component);
-        add_component(&mut entity,birth_component);
-        add_component(&mut entity,status_component);
+        add_component(&mut entity,name_component::get_component_id(),name_component);
+        add_component(&mut entity,sex_component::get_component_id(),sex_component);
+        add_component(&mut entity,birth_time_component::get_component_id(),birth_component);
+        add_component(&mut entity,status_component::get_component_id(),status_component);
 
         add_entity_in_world(world, &pet, entity);
 
@@ -45,8 +46,8 @@ module crypto_pet::pet_system {
     }
 
     // ============================================ View Functions ============================================
-    public fun get_pet_basic_info(world: &mut World, pet: &Pet, clock: &Clock): (string::String,bool,u64,u64) {
-        let entity = world::get_entity(world, pet);
+    public fun get_pet_basic_info(world: &mut World, pet_id: ID, clock: &Clock): (string::String,bool,u64,u64) {
+        let entity = world::get_entity(world, pet_id);
         let name_component_id = name_component::get_component_id();
         let name_component = entity::get_component<NameComponent>(entity, name_component_id);
         let sex_component_id = birth_time_component::get_component_id();

@@ -7,6 +7,8 @@ module crypto_pet::status_system {
     use eps::entity;
     use crypto_pet::status_component;
     use crypto_pet::status_component::Status;
+    use sui::object::ID;
+    use sui::object;
 
     public entry fun login(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
         update_state(world, pet, b"login", clock)
@@ -22,7 +24,7 @@ module crypto_pet::status_system {
 
     fun update_state(world: &mut World, pet: &Pet, state: vector<u8>,  clock: &Clock) {
         let status_component_id = status_component::get_component_id();
-        let (old_state,hunger_level,cleanliness_level,mood_level,level) = get_pet_state(world, pet, clock);
+        let (old_state,hunger_level,cleanliness_level,mood_level,level) = get_pet_state(world, object::id(pet), clock);
         assert!(state != old_state,0);
         let entity = world::get_mut_entity(world, pet);
         let status_component = entity::get_mut_component<Status>(entity, status_component_id);
@@ -30,8 +32,8 @@ module crypto_pet::status_system {
     }
 
     // ============================================ View Functions ============================================
-    public fun get_pet_state(world: &mut World, pet: &Pet , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
-        let entity = world::get_entity(world, pet);
+    public fun get_pet_state(world: &mut World, pet_id: ID , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+        let entity = world::get_entity(world, pet_id);
         let status_component_id = status_component::get_component_id();
         let status_component = entity::get_component<Status>(entity, status_component_id);
         let state = status_component::get_status_state(status_component);
