@@ -42,38 +42,15 @@ module crypto_pet::status_component {
         &mut status.state_time
     }
 
-    public fun set_status_state_time(status: &mut Status,state: vector<u8>, clock: &Clock) {
+    public fun set_status_state_time(status: &mut Status,state: vector<u8>, hunger_level:u64,cleanliness_level:u64,mood_level:u64,level:u64,clock: &Clock) {
         let state_time = get_mut_status_state_time(status);
         if (table::contains(state_time,state)) {
             *table::borrow_mut(state_time,state) = clock::timestamp_ms(clock);
         } else {
             table::add(state_time,state,clock::timestamp_ms(clock));
         };
-        status.state = state
-    }
-
-    public fun get_status_hunger_level(status: &mut Status) : u64 {
-        status.hunger_level
-    }
-
-    public fun set_status_hunger_level(status: &mut Status,hunger_level: u64) {
-        status.hunger_level = hunger_level;
-    }
-
-    public fun get_status_cleanliness_level(status: &mut Status) : u64 {
-        status.hunger_level
-    }
-
-    public fun set_status_cleanliness_level(status: &mut Status,cleanliness_level: u64) {
-        status.cleanliness_level = cleanliness_level;
-    }
-
-    public fun get_status_mood_level(status: &mut Status) : u64 {
-        status.mood_level
-    }
-
-    public fun set_status_mood_level(status: &mut Status,mood_level: u64) {
-        status.mood_level = mood_level;
+        status.state = state;
+        set_status_level(status,hunger_level,cleanliness_level,mood_level,level)
     }
 
     public fun get_status_level(status: &Status) : (u64,u64,u64,u64) {
@@ -90,6 +67,44 @@ module crypto_pet::status_component {
         status.cleanliness_level = cleanliness_level;
         status.mood_level = mood_level;
         status.level = level;
+    }
+
+    public fun get_current_state_consume_time_ms(status: &Status,clock: &Clock) : u64 {
+        let state_time_table = get_status_state_time(status);
+        let state_time = table::borrow(state_time_table,status.state);
+        let current_time = clock::timestamp_ms(clock);
+        current_time - *state_time
+    }
+
+    public fun login_rule(status: &Status,clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+        let consume_time_ms = get_current_state_consume_time_ms(status, clock);
+        let (hunger_level, cleanliness_level, mood_level, level) = get_status_level(status);
+        let consume_time_m = consume_time_ms / 60000u64;
+        if (hunger_level > consume_time_m * 2) {
+            hunger_level = hunger_level - consume_time_m * 2;
+        } else {
+            hunger_level = 0;
+        };
+
+        if (cleanliness_level > consume_time_m * 3) {
+            cleanliness_level = cleanliness_level - consume_time_m * 3;
+        }else {
+            cleanliness_level = 0;
+        };
+
+        if (mood_level > consume_time_m * 1) {
+            mood_level = mood_level - consume_time_m * 1;
+        } else {
+            mood_level = 0;
+        };
+
+        level = level + consume_time_m / 60u64;
+        return (status.state, hunger_level,cleanliness_level,mood_level,level)
+    }
+
+    public fun logout_rule(status: &Status) : (vector<u8>,u64,u64,u64,u64) {
+        let (hunger_level, cleanliness_level, mood_level, level) = get_status_level(status);
+        return (status.state, hunger_level,cleanliness_level,mood_level,level)
     }
 
     public fun get_component_id() : vector<u8> {

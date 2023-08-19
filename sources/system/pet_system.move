@@ -13,9 +13,9 @@ module crypto_pet::login_system {
     use components::name_component::NameComponent;
     use eps::entity;
     use crypto_pet::status_component;
-    use crypto_pet::status_component::Status;
-    use sui::table;
-    use sui::clock;
+    use std::string;
+    use components::birth_time_component::BirthTimeComponent;
+    use components::sex_component::SexComponent;
 
     /// add new pet to world
     public entry fun adopt_pet(world: &mut World, name: vector<u8>, sex: bool,clock: &Clock, ctx: &mut TxContext) {
@@ -45,40 +45,23 @@ module crypto_pet::login_system {
     }
 
     // ============================================ View Functions ============================================
-
-    public fun get_pet_state(world: &mut World, pet: &Pet , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+    public fun get_pet_basic_info(world: &mut World, pet: &Pet, clock: &Clock): (string::String,bool,u64,u64) {
         let entity = world::get_entity(world, pet);
-        let status_component_id = status_component::get_component_id();
-        let status_component = entity::get_component<Status>(entity, status_component_id);
-        let state = status_component::get_status_state(status_component);
-        let (hunger_level, cleanliness_level, mood_level, level) = status_component::get_status_level(status_component);
-        if (state == b"offline") {
-            return (state, hunger_level,cleanliness_level,mood_level,level)
-        };
-
-        let state_time_table = status_component::get_status_state_time(status_component);
-        let state_time = table::borrow(state_time_table,state);
-        let current_time = clock::timestamp_ms(clock);
-        let consume_time =  current_time - *state_time / 60000u64;
-        if (hunger_level > consume_time * 2) {
-            hunger_level = hunger_level - consume_time * 2;
-        } else {
-            hunger_level = 0;
-        };
-
-        if (cleanliness_level > consume_time * 3) {
-            cleanliness_level = cleanliness_level - consume_time * 3;
-        }else {
-            cleanliness_level = 0;
-        };
-
-        if (mood_level > consume_time * 1) {
-            mood_level = mood_level - consume_time * 1;
-        } else {
-            mood_level = 0;
-        };
-
-        level = level + consume_time / 60u64;
-        return (state, hunger_level,cleanliness_level,mood_level,level)
+        let name_component_id = name_component::get_component_id();
+        let name_component = entity::get_component<NameComponent>(entity, name_component_id);
+        let sex_component_id = birth_time_component::get_component_id();
+        let sex_component = entity::get_component<SexComponent>(entity, sex_component_id);
+        let birth_time_component_id = birth_time_component::get_component_id();
+        let birth_time_component = entity::get_component<BirthTimeComponent>(entity, birth_time_component_id);
+        (
+            name_component::get_name(name_component),
+            sex_component::get_sex(sex_component),
+            birth_time_component::get_birth_time(birth_time_component),
+            birth_time_component::get_age_timestamp(birth_time_component, clock),
+        )
     }
 }
+
+
+
+
