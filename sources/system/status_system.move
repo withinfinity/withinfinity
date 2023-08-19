@@ -1,4 +1,4 @@
-module crypto_pet::pet_system {
+module crypto_pet::status_system {
     use eps::world::World;
     use sui::tx_context::TxContext;
     use sui::clock::Clock;

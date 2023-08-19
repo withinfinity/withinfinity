@@ -13,8 +13,8 @@ Components = { local = "../obelisk-engine/components" }
 
 [addresses]
 sui =  "0x2"
-eps =  "0xf2196f638c3174e18c0e31aa630a02fd516c2c5deec1ded72c0fea864c9f091a"
-components =  "0x3bc407eb543149e42846ade59ac2a3c901584af4339dc1ecd0affd090529545f"
+eps =  "0x08c14fede9e7211c80275cc7f93ffba6861339e90768bd459ff57460dcd454b9"
+components =  "0x0148a6d29a954f89009b0bc12d513906c50bdd15b1c871742ed7885f9487a398"
 crypto_pet = "0x0"
 
 

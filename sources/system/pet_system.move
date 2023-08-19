@@ -1,4 +1,4 @@
-module crypto_pet::login_system {
+module crypto_pet::pet_system {
     use eps::world::{World, add_entity_in_world };
     use eps::entity::{create_entity, add_component };
     use sui::transfer;
