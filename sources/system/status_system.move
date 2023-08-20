@@ -13,11 +13,11 @@ module crypto_pet::status_system {
     use sui::clock;
 
     public entry fun login(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
-        update_state(world, pet, b"login", clock)
+        update_state(world, pet, b"online", clock)
     }
 
     public entry fun logout(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
-        update_state(world, pet, b"logout", clock)
+        update_state(world, pet, b"offline", clock)
     }
 
     public entry fun clean(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
@@ -40,7 +40,7 @@ module crypto_pet::status_system {
         current_time - *state_time
     }
 
-    public fun login_rule(status: &Status,clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+    public fun online_rule(status: &Status,clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
         let consume_time_ms = get_current_state_consume_time_ms(status, clock);
         let (hunger_level, cleanliness_level, mood_level, level) = status_component::get_status_level(status);
         let consume_time_m = consume_time_ms / 60000u64;
@@ -66,7 +66,7 @@ module crypto_pet::status_system {
         return (status_component::get_status_state(status), hunger_level,cleanliness_level,mood_level,level)
     }
 
-    public fun logout_rule(status: &Status) : (vector<u8>,u64,u64,u64,u64) {
+    public fun offline_rule(status: &Status) : (vector<u8>,u64,u64,u64,u64) {
         let (hunger_level, cleanliness_level, mood_level, level) = status_component::get_status_level(status);
         return (status_component::get_status_state(status), hunger_level,cleanliness_level,mood_level,level)
     }
@@ -77,10 +77,10 @@ module crypto_pet::status_system {
         let status_component_id = status_component::get_component_id();
         let status_component = entity::get_component<Status>(entity, status_component_id);
         let state = status_component::get_status_state(status_component);
-        if (state == b"login") {
-            login_rule(status_component,clock)
+        if (state == b"online") {
+            online_rule(status_component,clock)
         } else {
-            logout_rule(status_component)
+            offline_rule(status_component)
         }
     }
 }
