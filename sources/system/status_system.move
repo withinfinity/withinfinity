@@ -30,12 +30,13 @@ module crypto_pet::status_system {
         assert!(state != old_state,0);
         let entity = world::get_mut_entity(world, pet);
         let status_component = entity::get_mut_component<Status>(entity, status_component_id);
-        status_component::set_status_state_and_time_and_level(status_component,b"clean",hunger_level,cleanliness_level,mood_level,level,clock);
+        status_component::set_status_state_and_time_and_level(status_component,state,hunger_level,cleanliness_level,mood_level,level,clock);
     }
 
     public fun get_current_state_consume_time_ms(status: &Status,clock: &Clock) : u64 {
         let state_time_table = status_component::get_status_state_time(status);
-        let state_time = table::borrow(state_time_table,status_component::get_status_state(status));
+        let state = status_component::get_status_state(status);
+        let state_time = table::borrow(state_time_table,state);
         let current_time = clock::timestamp_ms(clock);
         current_time - *state_time
     }
@@ -98,7 +99,7 @@ module crypto_pet::status_system {
     }
 
     // ============================================ View Functions ============================================
-    public fun get_pet_state(world: &mut World, pet_id: ID , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+    public fun get_pet_state(world: &World, pet_id: ID , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
         let entity = world::get_entity(world, pet_id);
         let status_component_id = status_component::get_component_id();
         let status_component = entity::get_component<Status>(entity, status_component_id);

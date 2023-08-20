@@ -6,7 +6,7 @@ module crypto_pet::status_component {
     use sui::table::Table;
     use sui::tx_context::TxContext;
 
-    const COMPONENT_NAME: vector<u8> = b"CryptoPet component status";
+    const COMPONENT_NAME: vector<u8> = b"CryptoPet status component";
 
     const Hour:u64 = 3600000u64;
 
@@ -19,10 +19,12 @@ module crypto_pet::status_component {
         level: u64,
     }
 
-    public fun new_status(ctx:&mut TxContext): Status{
+    public fun new_status(ctx:&mut TxContext, clock: &Clock): Status{
+        let state_time = table::new<vector<u8>, u64>(ctx);
+        table::add<vector<u8>, u64>(&mut state_time, b"online", clock::timestamp_ms(clock));
         Status {
             state: b"online",
-            state_time: table::new(ctx),
+            state_time,
             hunger_level: 1000u64,
             cleanliness_level: 1200u64,
             mood_level: 900u64,

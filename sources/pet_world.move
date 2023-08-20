@@ -10,4 +10,10 @@ module crypto_pet::pet_world {
         let world = create_world(ctx, NAME, DESCRIPTION);
         transfer::public_share_object(world);
     }
+
+    #[test_only]
+    public fun pet_world_init(ctx: &mut TxContext) {
+        let world = create_world(ctx, NAME, DESCRIPTION);
+        transfer::public_share_object(world);
+    }
 }
