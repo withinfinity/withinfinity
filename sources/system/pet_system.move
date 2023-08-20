@@ -50,7 +50,7 @@ module crypto_pet::pet_system {
         let entity = world::get_entity(world, pet_id);
         let name_component_id = name_component::get_component_id();
         let name_component = entity::get_component<NameComponent>(entity, name_component_id);
-        let sex_component_id = birth_time_component::get_component_id();
+        let sex_component_id = sex_component::get_component_id();
         let sex_component = entity::get_component<SexComponent>(entity, sex_component_id);
         let birth_time_component_id = birth_time_component::get_component_id();
         let birth_time_component = entity::get_component<BirthTimeComponent>(entity, birth_time_component_id);
