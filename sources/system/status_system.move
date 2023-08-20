@@ -20,8 +20,8 @@ module crypto_pet::status_system {
         update_state(world, pet, b"offline", clock)
     }
 
-    public entry fun clean(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
-        update_state(world, pet, b"clean", clock)
+    public entry fun enter_home(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
+        update_state(world, pet, b"at_home", clock)
     }
 
     fun update_state(world: &mut World, pet: &Pet, state: vector<u8>,  clock: &Clock) {
@@ -30,7 +30,7 @@ module crypto_pet::status_system {
         assert!(state != old_state,0);
         let entity = world::get_mut_entity(world, pet);
         let status_component = entity::get_mut_component<Status>(entity, status_component_id);
-        status_component::set_status_state_time(status_component,b"clean",hunger_level,cleanliness_level,mood_level,level,clock);
+        status_component::set_status_state_and_time_and_level(status_component,b"clean",hunger_level,cleanliness_level,mood_level,level,clock);
     }
 
     public fun get_current_state_consume_time_ms(status: &Status,clock: &Clock) : u64 {
@@ -71,6 +71,32 @@ module crypto_pet::status_system {
         return (status_component::get_status_state(status), hunger_level,cleanliness_level,mood_level,level)
     }
 
+    public fun at_home_rule(status: &Status,clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+        let consume_time_ms = get_current_state_consume_time_ms(status, clock);
+        let (hunger_level, cleanliness_level, mood_level, level) = status_component::get_status_level(status);
+        let consume_time_m = consume_time_ms / 60000u64;
+        if (hunger_level > consume_time_m) {
+            hunger_level = hunger_level - consume_time_m;
+        } else {
+            hunger_level = 0;
+        };
+
+        if (cleanliness_level > consume_time_m) {
+            cleanliness_level = cleanliness_level - consume_time_m;
+        }else {
+            cleanliness_level = 0;
+        };
+
+        if (mood_level > consume_time_m) {
+            mood_level = mood_level - consume_time_m;
+        } else {
+            mood_level = 0;
+        };
+
+        level = level + consume_time_m / 60u64;
+        return (status_component::get_status_state(status), hunger_level,cleanliness_level,mood_level,level)
+    }
+
     // ============================================ View Functions ============================================
     public fun get_pet_state(world: &mut World, pet_id: ID , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
         let entity = world::get_entity(world, pet_id);
@@ -79,7 +105,9 @@ module crypto_pet::status_system {
         let state = status_component::get_status_state(status_component);
         if (state == b"online") {
             online_rule(status_component,clock)
-        } else {
+        } else if (state == b"at_home") {
+            at_home_rule(status_component,clock)
+        }else {
             offline_rule(status_component)
         }
     }

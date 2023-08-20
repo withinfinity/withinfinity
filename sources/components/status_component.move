@@ -42,7 +42,7 @@ module crypto_pet::status_component {
         &mut status.state_time
     }
 
-    public fun set_status_state_time(status: &mut Status,state: vector<u8>, hunger_level:u64,cleanliness_level:u64,mood_level:u64,level:u64,clock: &Clock) {
+    public fun set_status_state_and_time_and_level(status: &mut Status, state: vector<u8>, hunger_level:u64,cleanliness_level:u64,mood_level:u64,level:u64,clock: &Clock) {
         let state_time = get_mut_status_state_time(status);
         if (table::contains(state_time,state)) {
             *table::borrow_mut(state_time,state) = clock::timestamp_ms(clock);
