@@ -1,15 +1,15 @@
 #[test_only]
-module crypto_pet::status_system_tests {
+module withinfinity::status_system_tests {
     use sui::test_scenario;
     use eps::world::World;
-    use crypto_pet::pet_component::Pet;
-    use crypto_pet::pet_system_tests::adopt_pet_test;
+    use withinfinity::pet_component::Pet;
+    use withinfinity::pet_system_tests::adopt_pet_test;
     use sui::clock;
-    use crypto_pet::status_system;
+    use withinfinity::status_system;
     use sui::object;
-    use crypto_pet::status_component;
+    use withinfinity::status_component;
     use eps::world;
-    use crypto_pet::status_component::Status;
+    use withinfinity::status_component::Status;
     use eps::entity;
     use sui::clock::Clock;
 

@@ -1,4 +1,4 @@
-module crypto_pet::wifi {
+module withinfinity::wifi {
     use std::option;
     use sui::coin::{Self, Coin, TreasuryCap};
     use sui::transfer;

@@ -1,12 +1,12 @@
-module crypto_pet::status_system {
+module withinfinity::status_system {
     use eps::world::World;
     use sui::tx_context::TxContext;
     use sui::clock::Clock;
-    use crypto_pet::pet_component::Pet;
+    use withinfinity::pet_component::Pet;
     use eps::world;
     use eps::entity;
-    use crypto_pet::status_component;
-    use crypto_pet::status_component::Status;
+    use withinfinity::status_component;
+    use withinfinity::status_component::Status;
     use sui::object::ID;
     use sui::object;
     use sui::table;

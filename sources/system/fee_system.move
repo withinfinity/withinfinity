@@ -1,8 +1,8 @@
-module crypto_pet::fee_system {
+module withinfinity::fee_system {
     use eps::world::{World, get_mut_custom_entity};
-    use crypto_pet::fee::FeeInfo;
+    use withinfinity::fee::FeeInfo;
     use sui::tx_context::TxContext;
-    use crypto_pet::fee;
+    use withinfinity::fee;
     use sui::table;
 
     public entry fun set_operation_fee(world: &mut World, operation: vector<u8>, fee: u64, ctx: &mut TxContext){

@@ -1,4 +1,4 @@
-module crypto_pet::pet_component {
+module withinfinity::pet_component {
     use sui::tx_context::TxContext;
     use sui::object;
     use sui::object::UID;

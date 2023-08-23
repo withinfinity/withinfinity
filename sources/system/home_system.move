@@ -1,13 +1,13 @@
-module crypto_pet::home_system {
+module withinfinity::home_system {
     use eps::world::World;
     use sui::clock::Clock;
-    use crypto_pet::status_component::Status;
+    use withinfinity::status_component::Status;
     use sui::object;
     use eps::world;
     use eps::entity;
-    use crypto_pet::pet_component::Pet;
-    use crypto_pet::status_component;
-    use crypto_pet::status_system;
+    use withinfinity::pet_component::Pet;
+    use withinfinity::status_component;
+    use withinfinity::status_system;
 
 
     const Hour:u64 = 3600000u64;

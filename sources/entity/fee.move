@@ -1,4 +1,4 @@
-module crypto_pet::fee {
+module withinfinity::fee {
     use sui::table;
     use sui::table::Table;
     use sui::tx_context::TxContext;

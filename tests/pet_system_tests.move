@@ -1,13 +1,13 @@
 #[test_only]
-module crypto_pet::pet_system_tests {
+module withinfinity::pet_system_tests {
     use sui::test_scenario;
-    use crypto_pet::pet_world;
-    use crypto_pet::pet_system;
+    use withinfinity::pet_world;
+    use withinfinity::pet_system;
     use eps::world::{World, get_world_name, get_world_description};
     use sui::clock;
     use sui::test_scenario::Scenario;
     use sui::clock::Clock;
-    use crypto_pet::pet_component::Pet;
+    use withinfinity::pet_component::Pet;
     use sui::object;
 
     #[test]

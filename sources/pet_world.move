@@ -1,8 +1,8 @@
-module crypto_pet::pet_world {
+module withinfinity::pet_world {
     use sui::tx_context::TxContext;
     use eps::world::{create_world, add_custom_entity_in_world};
     use sui::transfer;
-    use crypto_pet::fee;
+    use withinfinity::fee;
 
     const NAME: vector<u8> = b"Crypto Pet";
     const DESCRIPTION: vector<u8> = b"A pet raising game";

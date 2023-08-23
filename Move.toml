@@ -1,5 +1,5 @@
 [package]
-name = "crypto_pet"
+name = "withinfinity"
 version = "0.0.1"
 #published-at = "0xeaf82cdd3decff9cd88781daed238adcbaeffb2ff7a80f6a8600fefa8586d10e"
 
@@ -15,6 +15,6 @@ Components = { local = "../obelisk-engine/components" }
 sui =  "0x2"
 eps =  "0xcd81c2e6f3589375c1a01f64034dcb3c1819a40c773d7f2ddf667a8d2683c104"
 components =  "0x75b65f518fb45c4d9fedd5541948ae4ebef462a013c26764a20099c1dac84e75"
-crypto_pet = "0x0"
+withinfinity = "0x0"
 
 

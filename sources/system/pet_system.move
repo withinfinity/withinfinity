@@ -1,18 +1,18 @@
-module crypto_pet::pet_system {
+module withinfinity::pet_system {
     use eps::world::{World, add_entity_in_world };
     use eps::entity::{create_entity, add_component };
     use sui::transfer;
     use sui::tx_context;
     use sui::tx_context::TxContext;
     use sui::clock::Clock;
-    use crypto_pet::pet_component::{new_pet, Pet};
+    use withinfinity::pet_component::{new_pet, Pet};
     use eps::world;
     use components::name_component;
     use components::sex_component;
     use components::birth_time_component;
     use components::name_component::NameComponent;
     use eps::entity;
-    use crypto_pet::status_component;
+    use withinfinity::status_component;
     use components::birth_time_component::BirthTimeComponent;
     use components::sex_component::SexComponent;
     use sui::object::ID;

@@ -1,4 +1,4 @@
-module crypto_pet::status_component {
+module withinfinity::status_component {
     use components::utils::generate_component_id;
     use sui::clock::Clock;
     use sui::clock;
