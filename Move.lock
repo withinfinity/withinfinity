@@ -2,18 +2,8 @@
 
 [move]
 version = 0
-manifest_digest = "411B0FBEDC437823464840B6AD9903C265DE2138151D1B09A4F78A46DCBADAEC"
-deps_digest = "752FA25F3082927F17B69EDE6F94AEA5814AB69CCAA3AFA0D2A8DAA8D790046E"
-
-dependencies = [
-  { name = "Components" },
-  { name = "Eps" },
-  { name = "Sui" },
-]
-
-[[move.package]]
-name = "Components"
-source = { local = "../obelisk-engine/components" }
+manifest_digest = "6659318007D4583AF2FB56CAAD8F4200EFD7FC048C258FE34788763741962A91"
+deps_digest = "81EE7D908A2BA4534DF95DFABF1575906EBF2C8A6BFC89DB065E6324A9C45ED4"
 
 dependencies = [
   { name = "Eps" },

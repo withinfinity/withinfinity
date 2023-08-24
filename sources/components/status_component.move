@@ -1,10 +1,10 @@
 module withinfinity::status_component {
-    use components::utils::generate_component_id;
     use sui::clock::Clock;
     use sui::clock;
     use sui::table;
     use sui::table::Table;
     use sui::tx_context::TxContext;
+    use sui::hash::keccak256;
 
     friend withinfinity::home_system;
     friend withinfinity::pet_system;
@@ -79,7 +79,7 @@ module withinfinity::status_component {
     }
 
     public(friend) fun get_component_id() : vector<u8> {
-        generate_component_id(COMPONENT_NAME)
+        keccak256(&COMPONENT_NAME)
     }
 
 }

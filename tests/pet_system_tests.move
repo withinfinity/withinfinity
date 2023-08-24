@@ -7,8 +7,7 @@ module withinfinity::pet_system_tests {
     use sui::clock;
     use sui::test_scenario::Scenario;
     use sui::clock::Clock;
-    use withinfinity::pet_component::Pet;
-    use sui::object;
+    use withinfinity::pet_component::{ Self, Pet};
 
     #[test]
     fun pet_world_init_should_work() {
@@ -53,16 +52,10 @@ module withinfinity::pet_system_tests {
         let scenario = &mut scenario_val;
 
         let pet = test_scenario::take_from_sender<Pet>(scenario);
-        let (name,sex,birth_time,age) = pet_system::get_pet_basic_info(&world,object::id(&pet), &clock);
+        let (name,sex,birth_time) = pet_component::get_pet_basic_info(&pet);
         assert!(name == b"BaoLong0",0);
         assert!(sex == false,0);
         assert!(birth_time == 1000,0);
-        assert!(age == 0,0);
-
-        clock::set_for_testing(&mut clock,2000);
-        let (_,_,birth_time,age) = pet_system::get_pet_basic_info(&world,object::id(&pet), &clock);
-        assert!(birth_time == 1000,0);
-        assert!(age == 1000,0);
 
         test_scenario::return_shared<World>(world);
         test_scenario::return_to_sender<Pet>(scenario, pet);
@@ -71,7 +64,7 @@ module withinfinity::pet_system_tests {
     }
 
     #[test]
-    fun update_pet_name_should_work() {
+    fun set_pet_name_should_work() {
         let (scenario_val, world, clock) = adopt_pet_test();
         let scenario = &mut scenario_val;
 
@@ -79,12 +72,12 @@ module withinfinity::pet_system_tests {
 
         {
             let ctx = test_scenario::ctx(scenario);
-            pet_system::update_pet_name(&mut world, &pet, b"BaoLong1", ctx);
+            pet_system::set_pet_name(&mut pet,b"BaoLong1", ctx);
         };
 
         test_scenario::next_tx(scenario,@0x0001);
-        
-        let (name,_,_,_) = pet_system::get_pet_basic_info(&world,object::id(&pet), &clock);
+
+        let (name,_,_) = pet_component::get_pet_basic_info(&pet);
         assert!(name == b"BaoLong1",0);
 
         test_scenario::return_shared<World>(world);
