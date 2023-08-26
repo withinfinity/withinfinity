@@ -10,6 +10,7 @@ module withinfinity::pet_system {
     use sui::object;
     use withinfinity::state::StateStorage;
     use withinfinity::level::LevelStorage;
+    use sui::url;
 
     public entry fun init_system(world: &mut World, ctx: &mut TxContext) {
         add_storage_in_world(
@@ -30,7 +31,8 @@ module withinfinity::pet_system {
     /// add new pet to world
     public entry fun adopt_pet(world: &mut World, name: vector<u8>, sex: bool, clock: &Clock, ctx: &mut TxContext) {
         assert!(storage_contains(world, level::get_level_storage_key()), 0);
-        let pet = pet::new_pet(name, sex, clock, ctx);
+        let image_url = url::new_unsafe_from_bytes(b"https://ipfs.io/ipfs/QmUygfragP8UmCa7aq19AHLttxiLw1ELnqcsQQpM5crgTF/10.png");
+        let pet = pet::new_pet(name, sex, image_url, clock, ctx);
         let pet_id = object::id(&pet);
 
         let state_storage = get_mut_storage<StateStorage>(world,state::get_state_storage_key());
