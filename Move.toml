@@ -1,14 +1,14 @@
 [package]
 name = "withinfinity"
 version = "0.0.1"
-#published-at = "0xeaf82cdd3decff9cd88781daed238adcbaeffb2ff7a80f6a8600fefa8586d10e"
-
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet-v1.8.0" }
+robots = { local = "../sui-robots-contracts" }
 
 [addresses]
 sui =  "0x2"
 withinfinity = "0x0"
+robots = "0x0ce63c825c4d87db72b52a56a258ceca8d21e86129cc2f6af09422908a1351a9"
 
 

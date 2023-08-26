@@ -11,6 +11,7 @@ module withinfinity::pet_system {
     use withinfinity::state::StateStorage;
     use withinfinity::level::LevelStorage;
     use sui::url;
+    use robots::robots_nft::RobotsNFT;
 
     public entry fun init_system(world: &mut World, ctx: &mut TxContext) {
         add_storage_in_world(
@@ -41,6 +42,17 @@ module withinfinity::pet_system {
         level::insert_level_data_all(level_storage, pet_id, 1000,1200,900,0);
 
         transfer::public_transfer(pet, tx_context::sender(ctx));
+    }
+
+    /// add suifren nft to world
+    public entry fun suifren_pet(world: &mut World, suifren: &RobotsNFT, clock: &Clock, _ctx: &mut TxContext) {
+        assert!(storage_contains(world, level::get_level_storage_key()), 0);
+        let pet_id = object::id(suifren);
+
+        let state_storage = get_mut_storage<StateStorage>(world,state::get_state_storage_key());
+        state::insert_state_data_all(state_storage, pet_id, b"online", clock::timestamp_ms(clock));
+        let level_storage = get_mut_storage<LevelStorage>(world,level::get_level_storage_key());
+        level::insert_level_data_all(level_storage, pet_id, 1000,1200,900,0);
     }
 
     public entry fun set_pet_name(pet: &mut Pet, name: vector<u8>, _ctx: &mut TxContext) {
