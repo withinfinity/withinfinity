@@ -2,17 +2,8 @@
 
 [move]
 version = 0
-manifest_digest = "6659318007D4583AF2FB56CAAD8F4200EFD7FC048C258FE34788763741962A91"
-deps_digest = "81EE7D908A2BA4534DF95DFABF1575906EBF2C8A6BFC89DB065E6324A9C45ED4"
-
-dependencies = [
-  { name = "Eps" },
-  { name = "Sui" },
-]
-
-[[move.package]]
-name = "Eps"
-source = { local = "../obelisk-engine/eps" }
+manifest_digest = "7D9D84B5C3DA73FE0A9A97D6F44B3A301E70890B093BF63A25720608D752633C"
+deps_digest = "112928C94A84031C09CD9B9D1D44B149B73FC0EEA5FA8D8B2D7CA4D91936335A"
 
 dependencies = [
   { name = "Sui" },
