@@ -10,7 +10,7 @@ module withinfinity::pet_system {
     use withinfinity::world;
     use withinfinity::state_component::StateComponent;
     use withinfinity::state_component;
-    use withinfinity::entity;
+    use withinfinity::entity_key;
     use withinfinity::level_component::LevelComponent;
     use withinfinity::level_component;
 
@@ -18,7 +18,7 @@ module withinfinity::pet_system {
     public entry fun adopt_pet(world: &mut World, name: vector<u8>, sex: bool, clock: &Clock, ctx: &mut TxContext) {
         let image_url = url::new_unsafe_from_bytes(b"https://ipfs.io/ipfs/QmUygfragP8UmCa7aq19AHLttxiLw1ELnqcsQQpM5crgTF/10.png");
         let pet = pet::new_pet(name, sex, image_url, clock, ctx);
-        let pet_id = entity::object_to_entity_key<Pet>(&pet);
+        let pet_id = entity_key::object_to_entity_key<Pet>(&pet);
 
         let state_component = world::get_mut_component<StateComponent>(world,state_component::get_component_name());
         state_component::add(state_component, pet_id, b"online", clock::timestamp_ms(clock));
@@ -30,7 +30,7 @@ module withinfinity::pet_system {
 
     /// add suifren nft to world
     public entry fun suifren_pet(world: &mut World, suifren: &RobotsNFT, clock: &Clock, _ctx: &mut TxContext) {
-        let pet_id = entity::object_to_entity_key<RobotsNFT>(suifren);
+        let pet_id = entity_key::object_to_entity_key<RobotsNFT>(suifren);
 
         let state_component = get_mut_component<StateComponent>(world,state_component::get_component_name());
         state_component::add(state_component, pet_id, b"online", clock::timestamp_ms(clock));

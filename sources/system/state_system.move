@@ -9,7 +9,7 @@ module withinfinity::state_system {
     use withinfinity::level_component::LevelComponent;
     use withinfinity::pet::Pet;
     use sui::tx_context::TxContext;
-    use withinfinity::entity;
+    use withinfinity::entity_key;
 
     const Hour:u64 = 3600000u64;
     const Minute:u64 = 60000u64;
@@ -24,7 +24,7 @@ module withinfinity::state_system {
     }
 
     fun update_state(world: &mut World, pet: &Pet, state: vector<u8>,  clock: &Clock) {
-        let pet_id = entity::object_to_entity_key(pet);
+        let pet_id = entity_key::object_to_entity_key(pet);
         let (old_state,hunger,cleanliness,mood,level) = get_pet_state_and_level(world, pet_id, clock);
         assert!(state != old_state, 0);
 
