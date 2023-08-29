@@ -1,78 +1,87 @@
-module withinfinity::state {
+module withinfinity::state_component {
     use sui::tx_context::TxContext;
-    use sui::object::ID;
-    use sui::table::Table;
-    use sui::table;
+    use sui::table::{ Self, Table };
+    use withinfinity::world::{ Self , World };
 
-    // friend withinfinity::home_system;
+    // Systems
+    friend withinfinity::fee_system;
+    friend withinfinity::home_system;
     friend withinfinity::pet_system;
     friend withinfinity::state_system;
 
-    #[test_only]
-    friend withinfinity::state_system_tests;
+    const COMPONENT_NAME: vector<u8> = b"State Component";
 
-    struct StateData has store {
+    public fun get_component_name() : vector<u8> {
+        COMPONENT_NAME
+    }
+
+    struct StateData has drop, store {
         state: vector<u8>,
         last_update_time: u64
     }
 
-    struct StateStorage has store {
-        state_data: Table<ID, StateData>,
+    struct StateComponent has store {
+        table: Table<vector<u8>, StateData>,
     }
 
-    public(friend) fun new_state_storage(ctx: &mut TxContext): StateStorage {
-        StateStorage {
-            state_data: table::new<ID, StateData>(ctx)
-        }
+    public fun register(world: &mut World, ctx: &mut TxContext) {
+        world::add_component_in_world<StateComponent>(
+            world,
+            COMPONENT_NAME,
+            StateComponent {
+                table: table::new<vector<u8>, StateData>(ctx)
+            }
+        );
     }
 
-    public(friend) fun new_state_data(state: vector<u8>, last_update_time: u64): StateData {
+    public fun new(state: vector<u8>, last_update_time: u64): StateData {
         StateData {
             state,
             last_update_time
         }
     }
 
-    public(friend) fun get_state_data_state(state_storage: &StateStorage, key: ID) : vector<u8> {
-        table::borrow<ID, StateData>(&state_storage.state_data, key).state
+    public(friend) fun add(component : &mut StateComponent, key: vector<u8>, state: vector<u8>, last_update_time: u64) {
+        table::add(&mut component.table, key, new(state, last_update_time));
     }
 
-    public(friend) fun get_state_data_last_update_time(state_storage: &StateStorage, key: ID) : u64 {
-        table::borrow<ID, StateData>(&state_storage.state_data, key).last_update_time
+    public(friend) fun remove(component : &mut StateComponent, key: vector<u8>) {
+        table::remove(&mut component.table, key);
     }
 
-    public(friend) fun get_state_data_all(state_storage: &StateStorage, key: ID) : (vector<u8>, u64) {
-        let data = table::borrow<ID, StateData>(&state_storage.state_data, key);
+    public(friend) fun update(component : &mut StateComponent, key: vector<u8>, state: vector<u8>, last_update_time: u64) {
+        let data =  table::borrow_mut<vector<u8>, StateData>(&mut component.table, key);
+        data.state = state;
+        data.last_update_time = last_update_time;
+    }
+
+
+    public(friend) fun update_state(component: &mut StateComponent, key: vector<u8>, state: vector<u8>) {
+        table::borrow_mut<vector<u8>, StateData>(&mut component.table, key).state = state;
+    }
+
+    public(friend) fun update_last_update_time(component: &mut StateComponent, key: vector<u8>, last_update_time: u64) {
+        table::borrow_mut<vector<u8>, StateData>(&mut component.table, key).last_update_time = last_update_time
+    }
+
+    public fun get(component: &StateComponent, key: vector<u8>) : (vector<u8>, u64) {
+        let data = table::borrow<vector<u8>, StateData>(&component.table, key);
         (
             data.state,
             data.last_update_time
         )
     }
 
-    public(friend) fun set_state_data_state(state_storage: &mut StateStorage, key: ID, state: vector<u8>) {
-        table::borrow_mut<ID, StateData>(&mut state_storage.state_data, key).state = state;
+    public fun get_state(component: &StateComponent, key: vector<u8>) : vector<u8> {
+        table::borrow<vector<u8>, StateData>(&component.table, key).state
     }
 
-    public(friend) fun set_state_data_last_update_time(state_storage: &mut StateStorage, key: ID, last_update_time: u64) {
-        table::borrow_mut<ID, StateData>(&mut state_storage.state_data, key).last_update_time = last_update_time
+    public fun get_last_update_time(component: &StateComponent, key: vector<u8>) : u64 {
+        table::borrow<vector<u8>, StateData>(&component.table, key).last_update_time
     }
 
-    public(friend) fun set_state_data_all(state_storage : &mut StateStorage, key: ID, state: vector<u8>, last_update_time: u64) {
-        let data =  table::borrow_mut<ID, StateData>(&mut state_storage.state_data, key);
-        data.state = state;
-        data.last_update_time = last_update_time;
-    }
-
-    public(friend) fun insert_state_data_all(state_storage : &mut StateStorage, key: ID, state: vector<u8>, last_update_time: u64) {
-        table::add<ID, StateData>(&mut state_storage.state_data, key, new_state_data(state, last_update_time));
-    }
-
-    public(friend) fun contains(state_storage : &mut StateStorage, key: ID) {
-        table::borrow_mut<ID, StateData>(&mut state_storage.state_data, key);
-    }
-
-    public(friend) fun get_state_storage_key() : vector<u8> {
-        b"State Storage"
+    public(friend) fun contains(component : &mut StateComponent, key: vector<u8>) {
+        table::borrow_mut<vector<u8>, StateData>(&mut component.table, key);
     }
 
 }

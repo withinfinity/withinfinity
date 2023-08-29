@@ -2,19 +2,18 @@ module withinfinity::state_system {
     use withinfinity::world::World;
     use sui::clock::Clock;
     use withinfinity::world;
-    use sui::object::ID;
     use sui::clock;
-    use withinfinity::state::StateStorage;
-    use withinfinity::state;
-    use withinfinity::level;
-    use withinfinity::level::LevelStorage;
+    use withinfinity::state_component::StateComponent;
+    use withinfinity::state_component;
+    use withinfinity::level_component;
+    use withinfinity::level_component::LevelComponent;
     use withinfinity::pet::Pet;
     use sui::tx_context::TxContext;
-    use sui::object;
+    use withinfinity::entity;
 
     const Hour:u64 = 3600000u64;
-        const Minute:u64 = 60000u64;
-        const Second:u64 = 1000u64;
+    const Minute:u64 = 60000u64;
+    const Second:u64 = 1000u64;
 
     public entry fun login(world: &mut World, pet: &Pet, clock: &Clock, _ctx: &mut TxContext) {
         update_state(world, pet, b"online", clock)
@@ -25,16 +24,16 @@ module withinfinity::state_system {
     }
 
     fun update_state(world: &mut World, pet: &Pet, state: vector<u8>,  clock: &Clock) {
-        let pet_id = object::id(pet);
+        let pet_id = entity::object_to_entity_key(pet);
         let (old_state,hunger,cleanliness,mood,level) = get_pet_state_and_level(world, pet_id, clock);
         assert!(state != old_state, 0);
 
-        let state_storage = world::get_mut_storage<StateStorage>(world, state::get_state_storage_key());
-        state::set_state_data_all(state_storage, pet_id,state, clock::timestamp_ms(clock));
+        let state_component = world::get_mut_component<StateComponent>(world, state_component::get_component_name());
+        state_component::update(state_component, pet_id,state, clock::timestamp_ms(clock));
 
         if (old_state != b"offline") {
-            let level_storage = world::get_mut_storage<LevelStorage>(world, level::get_level_storage_key());
-            level::set_level_data_all(level_storage, pet_id , hunger, cleanliness,mood, level)
+            let level_storage = world::get_mut_component<LevelComponent>(world, level_component::get_component_name());
+            level_component::update(level_storage, pet_id , hunger, cleanliness,mood, level)
         };
     }
 
@@ -64,12 +63,12 @@ module withinfinity::state_system {
 
     // ============================================ View Functions ============================================
 
-    public fun get_pet_state_and_level(world: &World, pet_id: ID , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
-        let state_storage = world::get_storage<StateStorage>(world,state::get_state_storage_key());
-        let (state , last_update_time) = state::get_state_data_all(state_storage,pet_id);
+    public fun get_pet_state_and_level(world: &World, pet_id: vector<u8> , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
+        let state_component = world::get_component<StateComponent>(world,state_component::get_component_name());
+        let (state , last_update_time) = state_component::get(state_component,pet_id);
 
-        let level_storage = world::get_storage<LevelStorage>(world,level::get_level_storage_key());
-        let (hunger , cleanliness , mood ,level) = level::get_level_data_all(level_storage, pet_id);
+        let level_component = world::get_component<LevelComponent>(world,level_component::get_component_name());
+        let (hunger , cleanliness , mood ,level) = level_component::get(level_component, pet_id);
 
         let current_time = clock::timestamp_ms(clock);
         let consume_time = current_time - last_update_time;

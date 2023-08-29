@@ -61,7 +61,7 @@ module withinfinity::pet {
         }
     }
 
-    public fun set_pet_name(pet: &mut Pet, name: vector<u8>) {
+    public fun update_pet_name(pet: &mut Pet, name: vector<u8>) {
         pet.name = name
     }
 

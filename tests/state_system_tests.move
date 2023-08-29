@@ -9,10 +9,10 @@ module withinfinity::state_system_tests {
     use withinfinity::world;
     use sui::clock::Clock;
     use withinfinity::state_system;
-    use withinfinity::state::StateStorage;
-    use withinfinity::state;
-    use withinfinity::level::LevelStorage;
-    use withinfinity::level;
+    use withinfinity::state_component::StateComponent;
+    use withinfinity::state_component;
+    use withinfinity::level_component::LevelComponent;
+    use withinfinity::level_component;
 
     #[test_only]
     fun check_current_data(world: &World, pet: &Pet, clock : &Clock, state: vector<u8>, hunger_level:u64, cleanliness_level:u64,mood_level:u64,level:u64) {
@@ -28,11 +28,11 @@ module withinfinity::state_system_tests {
     #[test_only]
     fun check_storage_data(world: &World, pet: &Pet, state: vector<u8>, hunger: u64, cleanliness: u64,mood: u64,level: u64) {
         let pet_id = object::id(pet);
-        let state_storage = world::get_storage<StateStorage>(world,state::get_state_storage_key());
-        let (storage_state , _) = state::get_state_data_all(state_storage, pet_id);
+        let state_component = world::get_component<StateComponent>(world,state::get_state_component_key());
+        let (storage_state , _) = state::get(state_component, pet_id);
 
-        let level_storage = world::get_storage<LevelStorage>(world,level::get_level_storage_key());
-        let (storage_hunger , storage_cleanliness , storage_mood ,storage_level) = level::get_level_data_all(level_storage, pet_id);
+        let level_storage = world::get_component<LevelComponent>(world,level::get_level_component_key());
+        let (storage_hunger , storage_cleanliness , storage_mood ,storage_level) = level::get(level_storage, pet_id);
         assert!(storage_state == state, 0);
         assert!(storage_hunger == hunger, 0);
         assert!(storage_cleanliness == cleanliness, 0);

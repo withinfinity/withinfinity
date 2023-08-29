@@ -45,7 +45,7 @@ module withinfinity::pet_system_tests {
 
         let ctx = test_scenario::ctx(scenario);
         let clock = clock::create_for_testing(ctx);
-        clock::set_for_testing(&mut clock, 1000);
+        clock::update_for_testing(&mut clock, 1000);
         pet_system::adopt_pet(&mut world, b"BaoLong0", false , &clock , ctx);
 
         test_scenario::next_tx(scenario,@0x0001);
@@ -71,7 +71,7 @@ module withinfinity::pet_system_tests {
     }
 
     #[test]
-    fun set_pet_name_should_work() {
+    fun update_pet_name_should_work() {
         let (scenario_val, world, clock) = adopt_pet_test();
         let scenario = &mut scenario_val;
 
@@ -79,7 +79,7 @@ module withinfinity::pet_system_tests {
 
         {
             let ctx = test_scenario::ctx(scenario);
-            pet_system::set_pet_name(&mut pet,b"BaoLong1", ctx);
+            pet_system::update_pet_name(&mut pet,b"BaoLong1", ctx);
         };
 
         test_scenario::next_tx(scenario,@0x0001);

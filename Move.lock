@@ -2,11 +2,12 @@
 
 [move]
 version = 0
-manifest_digest = "7D9D84B5C3DA73FE0A9A97D6F44B3A301E70890B093BF63A25720608D752633C"
-deps_digest = "112928C94A84031C09CD9B9D1D44B149B73FC0EEA5FA8D8B2D7CA4D91936335A"
+manifest_digest = "8926ADA315984A1EFD1B0EFE7C37E48E1E02CE04E303239B2E10EA189428ED76"
+deps_digest = "9263CBEB32288979226EA3DC85ADAEF63B853D91AF77E36042EF7441488EA0EA"
 
 dependencies = [
   { name = "Sui" },
+  { name = "robots" },
 ]
 
 [[move.package]]
@@ -19,4 +20,12 @@ source = { git = "https://github.com/MystenLabs/sui.git", rev = "testnet-v1.8.0"
 
 dependencies = [
   { name = "MoveStdlib" },
+]
+
+[[move.package]]
+name = "robots"
+source = { local = "../sui-robots-contracts" }
+
+dependencies = [
+  { name = "Sui" },
 ]
