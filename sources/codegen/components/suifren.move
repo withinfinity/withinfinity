@@ -11,42 +11,37 @@ module withinfinity::suifren_component {
 
     const COMPONENT_NAME: vector<u8> = b"Suifren Component";
 
-    public fun get_component_name() : vector<u8> {
-        COMPONENT_NAME
-    }
-
-    struct SuifrenComponent has store {
-        table: Table<vector<u8>,bool>,
-    }
-
     public fun register(world: &mut World, ctx: &mut TxContext) {
-        world::add_component_in_world<SuifrenComponent>(
+        world::add_component_in_world<Table<vector<u8>,bool>>(
             world,
             COMPONENT_NAME,
-            SuifrenComponent {
-                table: table::new<vector<u8>,bool>(ctx)
-            }
+            table::new<vector<u8>,bool>(ctx)
         );
     }
 
-    public(friend) fun add(component : &mut SuifrenComponent, key: vector<u8>, value: bool) {
-        table::add(&mut component.table, key, value);
+    public(friend) fun add(world : &mut World, key: vector<u8>, value: bool) {
+        let component = world::get_mut_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
+        table::add(component, key, value);
     }
 
-    public(friend) fun remove(component : &mut SuifrenComponent, key: vector<u8>) {
-        table::remove(&mut component.table, key);
+    public(friend) fun remove(world : &mut World, key: vector<u8>) {
+        let component = world::get_mut_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
+        table::remove(component, key);
     }
 
-    public(friend) fun update(component : &mut SuifrenComponent, key: vector<u8>, value: bool) {
-        *table::borrow_mut<vector<u8>, bool>(&mut component.table, key) = value;
+    public(friend) fun update(world : &mut World, key: vector<u8>, value: bool) {
+        let component = world::get_mut_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
+        *table::borrow_mut<vector<u8>, bool>(component, key) = value;
     }
 
-    public fun get(component: &SuifrenComponent, key: vector<u8>) : bool {
-        *table::borrow<vector<u8>, bool>(&component.table, key)
+    public fun get(world : &World, key: vector<u8>) : bool {
+        let component = world::get_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
+        *table::borrow<vector<u8>, bool>(component, key)
     }
 
-    public(friend) fun contains(state_component : &mut SuifrenComponent, key: vector<u8>) {
-        table::borrow_mut<vector<u8>, bool>(&mut state_component.table, key);
+    public fun contains(world : &mut World, key: vector<u8>): bool {
+        let component = world::get_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
+        table::contains<vector<u8>, bool>(component, key)
     }
 
 }

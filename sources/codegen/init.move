@@ -34,4 +34,9 @@ module withinfinity::init {
 
         transfer::public_share_object(world);
     }
+
+    #[test_only]
+    public fun init_world_for_testing(ctx: &mut TxContext){
+        init(ctx)
+    }
 }

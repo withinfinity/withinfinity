@@ -1,14 +1,15 @@
 #[test_only]
 module withinfinity::pet_system_tests {
     use sui::test_scenario;
-    use withinfinity::pet_world;
     use withinfinity::pet_system;
+    use withinfinity::init;
     use withinfinity::world::{World};
     use sui::clock;
     use sui::test_scenario::Scenario;
     use sui::clock::Clock;
     use withinfinity::pet::{ Self, Pet};
-    use withinfinity::world;
+    use withinfinity::info_config;
+    use std::string;
 
     #[test]
     fun pet_world_init_should_work() {
@@ -16,12 +17,15 @@ module withinfinity::pet_system_tests {
         let scenario = &mut scenario_val;
         {
             let ctx = test_scenario::ctx(scenario);
-            pet_world::pet_world_init(ctx);
+            init::init_world_for_testing(ctx);
         };
         test_scenario::next_tx(scenario,@0x0001);
         let world = test_scenario::take_shared<World>(scenario);
-        assert!(world::get_world_name(&world) == b"Crypto Pet", 0);
-        assert!(world::get_world_description(&world) == b"A pet raising game", 0);
+        let (name,descrption,bitrth_time) = info_config::get(&world);
+        assert!(*string::bytes(&name) == b"Crypto Pet", 0);
+        assert!(*string::bytes(&descrption) == b"Crypto Pet", 0);
+        assert!(bitrth_time == 1000000, 0);
+
         test_scenario::return_shared<World>(world);
         test_scenario::end(scenario_val);
     }
@@ -32,20 +36,15 @@ module withinfinity::pet_system_tests {
         let scenario = &mut scenario_val;
         {
             let ctx = test_scenario::ctx(scenario);
-            pet_world::pet_world_init(ctx);
+            init::init_world_for_testing(ctx);
         };
         test_scenario::next_tx(scenario,@0x0001);
 
         let world = test_scenario::take_shared<World>(scenario);
-        {
-            let ctx = test_scenario::ctx(scenario);
-            pet_system::init_system(&mut world , ctx);
-        };
-        test_scenario::next_tx(scenario,@0x0001);
 
         let ctx = test_scenario::ctx(scenario);
         let clock = clock::create_for_testing(ctx);
-        clock::update_for_testing(&mut clock, 1000);
+        clock::set_for_testing(&mut clock, 1000);
         pet_system::adopt_pet(&mut world, b"BaoLong0", false , &clock , ctx);
 
         test_scenario::next_tx(scenario,@0x0001);

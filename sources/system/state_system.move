@@ -1,12 +1,9 @@
 module withinfinity::state_system {
     use withinfinity::world::World;
     use sui::clock::Clock;
-    use withinfinity::world;
     use sui::clock;
-    use withinfinity::state_component::StateComponent;
     use withinfinity::state_component;
     use withinfinity::level_component;
-    use withinfinity::level_component::LevelComponent;
     use withinfinity::pet::Pet;
     use sui::tx_context::TxContext;
     use withinfinity::entity_key;
@@ -28,12 +25,10 @@ module withinfinity::state_system {
         let (old_state,hunger,cleanliness,mood,level) = get_pet_state_and_level(world, pet_id, clock);
         assert!(state != old_state, 0);
 
-        let state_component = world::get_mut_component<StateComponent>(world, state_component::get_component_name());
-        state_component::update(state_component, pet_id,state, clock::timestamp_ms(clock));
+        state_component::update(world, pet_id,state, clock::timestamp_ms(clock));
 
         if (old_state != b"offline") {
-            let level_storage = world::get_mut_component<LevelComponent>(world, level_component::get_component_name());
-            level_component::update(level_storage, pet_id , hunger, cleanliness,mood, level)
+            level_component::update(world, pet_id , hunger, cleanliness,mood, level)
         };
     }
 
@@ -64,11 +59,8 @@ module withinfinity::state_system {
     // ============================================ View Functions ============================================
 
     public fun get_pet_state_and_level(world: &World, pet_id: vector<u8> , clock: &Clock) : (vector<u8>,u64,u64,u64,u64) {
-        let state_component = world::get_component<StateComponent>(world,state_component::get_component_name());
-        let (state , last_update_time) = state_component::get(state_component,pet_id);
-
-        let level_component = world::get_component<LevelComponent>(world,level_component::get_component_name());
-        let (hunger , cleanliness , mood ,level) = level_component::get(level_component, pet_id);
+        let (state , last_update_time) = state_component::get(world,pet_id);
+        let (hunger , cleanliness , mood ,level) = level_component::get(world, pet_id);
 
         let current_time = clock::timestamp_ms(clock);
         let consume_time = current_time - last_update_time;

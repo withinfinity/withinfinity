@@ -1,5 +1,5 @@
 module withinfinity::pet_system {
-    use withinfinity::world::{World, get_mut_component};
+    use withinfinity::world::World;
     use sui::transfer;
     use sui::tx_context::{ Self, TxContext };
     use sui::clock::Clock;
@@ -7,11 +7,8 @@ module withinfinity::pet_system {
     use sui::clock;
     use sui::url;
     use robots::robots_nft::RobotsNFT;
-    use withinfinity::world;
-    use withinfinity::state_component::StateComponent;
     use withinfinity::state_component;
     use withinfinity::entity_key;
-    use withinfinity::level_component::LevelComponent;
     use withinfinity::level_component;
 
     /// add new pet to world
@@ -20,10 +17,8 @@ module withinfinity::pet_system {
         let pet = pet::new_pet(name, sex, image_url, clock, ctx);
         let pet_id = entity_key::object_to_entity_key<Pet>(&pet);
 
-        let state_component = world::get_mut_component<StateComponent>(world,state_component::get_component_name());
-        state_component::add(state_component, pet_id, b"online", clock::timestamp_ms(clock));
-        let level_component = world::get_mut_component<LevelComponent>(world,level_component::get_component_name());
-        level_component::add(level_component, pet_id, 1000,1200,900,0);
+        state_component::add(world, pet_id, b"online", clock::timestamp_ms(clock));
+        level_component::add(world, pet_id, 1000,1200,900,0);
 
         transfer::public_transfer(pet, tx_context::sender(ctx));
     }
@@ -32,10 +27,8 @@ module withinfinity::pet_system {
     public entry fun suifren_pet(world: &mut World, suifren: &RobotsNFT, clock: &Clock, _ctx: &mut TxContext) {
         let pet_id = entity_key::object_to_entity_key<RobotsNFT>(suifren);
 
-        let state_component = get_mut_component<StateComponent>(world,state_component::get_component_name());
-        state_component::add(state_component, pet_id, b"online", clock::timestamp_ms(clock));
-        let level_component = get_mut_component<LevelComponent>(world,level_component::get_component_name());
-        level_component::add(level_component, pet_id, 1000,1200,900,0);
+        state_component::add(world, pet_id, b"online", clock::timestamp_ms(clock));
+        level_component::add(world, pet_id, 1000,1200,900,0);
     }
 
     public entry fun update_pet_name(pet: &mut Pet, name: vector<u8>, _ctx: &mut TxContext) {

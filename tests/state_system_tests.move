@@ -5,18 +5,16 @@ module withinfinity::state_system_tests {
     use withinfinity::pet::Pet;
     use withinfinity::pet_system_tests::adopt_pet_test;
     use sui::clock;
-    use sui::object;
-    use withinfinity::world;
     use sui::clock::Clock;
     use withinfinity::state_system;
-    use withinfinity::state_component::StateComponent;
     use withinfinity::state_component;
-    use withinfinity::level_component::LevelComponent;
     use withinfinity::level_component;
+    use withinfinity::entity_key;
 
     #[test_only]
     fun check_current_data(world: &World, pet: &Pet, clock : &Clock, state: vector<u8>, hunger_level:u64, cleanliness_level:u64,mood_level:u64,level:u64) {
-        let (current_state ,current_hunger,current_cleanliness,current_mood,current_level) = state_system::get_pet_state_and_level(world, object::id(pet), clock);
+        let pet_id = entity_key::object_to_entity_key(pet);
+        let (current_state ,current_hunger,current_cleanliness,current_mood,current_level) = state_system::get_pet_state_and_level(world, pet_id, clock);
         assert!(current_state == state, 0);
         assert!(current_hunger == hunger_level, 0);
         assert!(current_cleanliness == cleanliness_level, 0);
@@ -27,12 +25,11 @@ module withinfinity::state_system_tests {
 
     #[test_only]
     fun check_storage_data(world: &World, pet: &Pet, state: vector<u8>, hunger: u64, cleanliness: u64,mood: u64,level: u64) {
-        let pet_id = object::id(pet);
-        let state_component = world::get_component<StateComponent>(world,state::get_state_component_key());
-        let (storage_state , _) = state::get(state_component, pet_id);
+        let pet_id = entity_key::object_to_entity_key(pet);
 
-        let level_storage = world::get_component<LevelComponent>(world,level::get_level_component_key());
-        let (storage_hunger , storage_cleanliness , storage_mood ,storage_level) = level::get(level_storage, pet_id);
+        let (storage_state , _) = state_component::get(world, pet_id);
+        let (storage_hunger , storage_cleanliness , storage_mood ,storage_level) = level_component::get(world, pet_id);
+
         assert!(storage_state == state, 0);
         assert!(storage_hunger == hunger, 0);
         assert!(storage_cleanliness == cleanliness, 0);
