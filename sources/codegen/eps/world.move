@@ -65,8 +65,7 @@ module withinfinity::world {
 
     public fun world_contains_component(world: &mut World, component_name: vector<u8>): bool {
         let component_id = keccak256(&component_name);
-        let storage_id = object::id_from_bytes(component_id);
-        bag::contains(&mut world.components, storage_id)
+        bag::contains(&mut world.components, component_id)
     }
 
     public fun get_config<T : store>(world: &World, config_name: vector<u8>): &T {

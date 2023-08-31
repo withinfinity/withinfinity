@@ -22,11 +22,13 @@ module withinfinity::suifren_component {
     public(friend) fun add(world : &mut World, key: vector<u8>, value: bool) {
         let component = world::get_mut_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
         table::add(component, key, value);
+        world::add_component_in_entity(world, key, COMPONENT_NAME)
     }
 
     public(friend) fun remove(world : &mut World, key: vector<u8>) {
         let component = world::get_mut_component<Table<vector<u8>,bool>>(world, COMPONENT_NAME);
         table::remove(component, key);
+        world::remove_component_from_entity(world, key)
     }
 
     public(friend) fun update(world : &mut World, key: vector<u8>, value: bool) {

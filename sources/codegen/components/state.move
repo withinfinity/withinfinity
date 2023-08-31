@@ -34,11 +34,13 @@ module withinfinity::state_component {
     public(friend) fun add(world : &mut World, key: vector<u8>, state: vector<u8>, last_update_time: u64) {
         let component = world::get_mut_component<Table<vector<u8>,StateData>>(world, COMPONENT_NAME);
         table::add(component, key, new(state, last_update_time));
+        world::add_component_in_entity(world, key, COMPONENT_NAME)
     }
 
     public(friend) fun remove(world : &mut World, key: vector<u8>) {
         let component = world::get_mut_component<Table<vector<u8>,StateData>>(world, COMPONENT_NAME);
         table::remove(component, key);
+        world::remove_component_from_entity(world, key)
     }
 
     public(friend) fun update(world : &mut World, key: vector<u8>, state: vector<u8>, last_update_time: u64) {
