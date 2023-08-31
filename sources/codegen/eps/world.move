@@ -15,11 +15,6 @@ module withinfinity::world {
     friend withinfinity::state_component;
     friend withinfinity::suifren_component;
 
-    // configs
-    friend withinfinity::admin_config;
-    friend withinfinity::fee_config;
-    friend withinfinity::info_config;
-
     // systems
     friend withinfinity::fee_system;
     friend withinfinity::home_system;

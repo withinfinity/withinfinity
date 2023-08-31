@@ -1,8 +1,6 @@
 module withinfinity::info_config {
     use std::string::String;
     use std::string;
-    use withinfinity::world::World;
-    use withinfinity::world;
 
     struct InfoConfig has store {
         name: String,
@@ -18,20 +16,12 @@ module withinfinity::info_config {
         }
     }
 
-    public fun get(world: &World): (String , String, u64) {
-        let config = world::get_config<InfoConfig>(world, get_config_name());
+    public fun get(info_config: &InfoConfig): (String , String, u64) {
         (
-            config.name,
-            config.description,
-            config.birth_time,
+            info_config.name,
+            info_config.description,
+            info_config.birth_time,
         )
-    }
-
-    public(friend) fun update(world: &mut World, name: String, description: String, birth_time: u64) {
-        let config = world::get_mut_config<InfoConfig>(world, get_config_name());
-        config.name = name;
-        config.description = description;
-        config.birth_time = birth_time;
     }
 
     public fun get_config_name() : vector<u8> {
@@ -39,7 +29,7 @@ module withinfinity::info_config {
     }
 
     public fun get_init_value() : InfoConfig {
-       new(
+        new(
             string::utf8(b"Crypto Pet"),
             string::utf8(b"Crypto Pet"),
             1000000

@@ -10,6 +10,8 @@ module withinfinity::pet_system_tests {
     use withinfinity::pet::{ Self, Pet};
     use withinfinity::info_config;
     use std::string;
+    use withinfinity::world;
+    use withinfinity::info_config::InfoConfig;
 
     #[test]
     fun pet_world_init_should_work() {
@@ -21,7 +23,10 @@ module withinfinity::pet_system_tests {
         };
         test_scenario::next_tx(scenario,@0x0001);
         let world = test_scenario::take_shared<World>(scenario);
-        let (name,descrption,bitrth_time) = info_config::get(&world);
+
+        let info_config = world::get_config<InfoConfig>(&world, info_config::get_config_name());
+        let (name,descrption,bitrth_time) = info_config::get(info_config);
+
         assert!(*string::bytes(&name) == b"Crypto Pet", 0);
         assert!(*string::bytes(&descrption) == b"Crypto Pet", 0);
         assert!(bitrth_time == 1000000, 0);
