@@ -22,6 +22,23 @@ const  obeliskConfig = {
     },
     // Key - Single value
     suifren: "bool",
+
+    admin: {
+        type: "address",
+        init: "0x1"
+    },
+  info: {
+      type: {
+          name: "string",
+          description: "string",
+          birth_time: "u64",
+      },
+      init: {
+          name: "zahsan",
+          description: "zahsan",
+          birth_time: 1000
+      }
+  },
   },
   // world 的顶级存储，适合定义world的规则，比如一个admin, 一个fee，并且可以帮你初始化数据
   genesis_config: {

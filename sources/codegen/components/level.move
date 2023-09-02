@@ -28,7 +28,7 @@ module withinfinity::level_component {
     }
 
     public fun register(world: &mut World, ctx: &mut TxContext) {
-        world::add_component_in_world<Table<vector<u8>,LevelData>>(
+        world::add_component<Table<vector<u8>,LevelData>>(
             world,
             COMPONENT_NAME,
             table::new<vector<u8>,LevelData>(ctx)
@@ -38,13 +38,11 @@ module withinfinity::level_component {
     public(friend) fun add(world : &mut World, key: vector<u8>, hunger: u64, cleanliness: u64, mood: u64, level: u64) {
         let component = world::get_mut_component<Table<vector<u8>,LevelData>>(world, COMPONENT_NAME);
         table::add(component, key, new(hunger, cleanliness, mood, level));
-        world::add_component_in_entity(world, key, COMPONENT_NAME)
     }
 
     public(friend) fun remove(world : &mut World, key: vector<u8>) {
         let component = world::get_mut_component<Table<vector<u8>,LevelData>>(world, COMPONENT_NAME);
         table::remove(component, key);
-        world::remove_component_from_entity(world, key)
     }
 
     public(friend) fun update(world : &mut World, key: vector<u8>, hunger: u64, cleanliness: u64, mood: u64, level: u64) {
