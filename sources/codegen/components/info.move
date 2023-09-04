@@ -1,7 +1,6 @@
 module withinfinity::info_component {
-    use std::string::String;
+    use std::string::{Self, String};
     use withinfinity::world::{ Self, World};
-    use std::string;
 
     // Systems
     friend withinfinity::fee_system;
