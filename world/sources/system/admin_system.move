@@ -1,4 +1,4 @@
-module withinfinity::fee_system {
+module withinfinity::admin_system {
     // use withinfinity::world::World;
     // use sui::tx_context::TxContext;
     // use withinfinity::fee_config;

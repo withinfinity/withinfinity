@@ -1,13 +1,13 @@
-module withinfinity::suifren_component {
+module pet_growth::suifren_component {
     use sui::tx_context::TxContext;
     use sui::table::{ Self, Table };
     use withinfinity::world::{ Self , World };
 
     // Systems
-    friend withinfinity::fee_system;
-    friend withinfinity::home_system;
-    friend withinfinity::pet_system;
-    friend withinfinity::state_system;
+    friend pet_growth::fee_system;
+    friend pet_growth::home_system;
+    friend pet_growth::pet_system;
+    friend pet_growth::state_system;
 
     const COMPONENT_NAME: vector<u8> = b"Suifren Component";
 

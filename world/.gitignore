@@ -1,0 +1,7 @@
+/build
+.idea
+/scripts
+.DS_Store
+
+#sui log
+sui.log.*

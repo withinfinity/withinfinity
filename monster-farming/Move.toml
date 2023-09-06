@@ -1,0 +1,13 @@
+[package]
+name = "monster_farming"
+version = "0.0.1"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet-v1.8.0" }
+withinfinity = { local = "../world" }
+
+[addresses]
+sui =  "0x2"
+withinfinity = "0xe799034ecdfd4ac92eed6b4d7677bbeab11c2434efe6f9a4ca8113b9cd07bf31"
+monster_farming = "0x0"
+

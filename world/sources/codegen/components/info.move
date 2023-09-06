@@ -3,10 +3,7 @@ module withinfinity::info_component {
     use withinfinity::world::{ Self, World};
 
     // Systems
-    friend withinfinity::fee_system;
-    friend withinfinity::home_system;
-    friend withinfinity::pet_system;
-    friend withinfinity::state_system;
+    friend withinfinity::admin_system;
 
     const COMPONENT_NAME: vector<u8> = b"Info Component";
 

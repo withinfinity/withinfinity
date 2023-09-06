@@ -1,10 +1,10 @@
-module withinfinity::home_system {
+module pet_growth::home_system {
     use withinfinity::world::World;
     use sui::clock::Clock;
     use withinfinity::pet::Pet;
-    use withinfinity::state_system;
-    use withinfinity::level_component;
-    use withinfinity::entity_key;
+    use pet_growth::state_system;
+    use pet_growth::level_component;
+    use pet_growth::entity_key;
 
     const Hour:u64 = 3600000u64;
     const Minute:u64 = 60000u64;

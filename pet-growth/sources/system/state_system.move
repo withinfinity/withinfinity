@@ -1,12 +1,12 @@
-module withinfinity::state_system {
+module pet_growth::state_system {
     use withinfinity::world::World;
     use sui::clock::Clock;
     use sui::clock;
-    use withinfinity::state_component;
-    use withinfinity::level_component;
+    use pet_growth::state_component;
+    use pet_growth::level_component;
     use withinfinity::pet::Pet;
     use sui::tx_context::TxContext;
-    use withinfinity::entity_key;
+    use pet_growth::entity_key;
 
     const Hour:u64 = 3600000u64;
     const Minute:u64 = 60000u64;

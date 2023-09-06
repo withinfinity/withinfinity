@@ -3,7 +3,7 @@ module withinfinity::state_system_tests {
     use sui::test_scenario;
     use withinfinity::world::World;
     use withinfinity::pet::Pet;
-    use withinfinity::pet_system_tests::adopt_pet_test;
+    use withinfinity::admin_system_tests::adopt_pet_test;
     use sui::clock;
     use sui::clock::Clock;
     use withinfinity::state_system;
